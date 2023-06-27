@@ -29,4 +29,4 @@ RUN pip install --upgrade pip \
 COPY --from=frontend-builder /app/dist /app/static
 
 # Set the entrypoint command
-ENTRYPOINT ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "80"]
+ENTRYPOINT ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "443"]

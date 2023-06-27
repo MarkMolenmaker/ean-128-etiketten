@@ -1,5 +1,6 @@
 # python-multipart is required for file upload
 from fastapi import FastAPI, UploadFile, File
+from fastapi.middleware.httpsredirect import HTTPSRedirectMiddleware
 from starlette.middleware.cors import CORSMiddleware
 from starlette.responses import FileResponse
 from starlette.staticfiles import StaticFiles
@@ -11,8 +12,8 @@ app = FastAPI(title="Ean-128 Etiketten")
 api_app = FastAPI(title="Ean-128 Etiketten API")
 app.mount('/api', api_app)
 
-origins = ["http://localhost/*", "http://localhost:8000/*", "http://markmolenmaker.github.io", "https://markmolenmaker.github.io" ]
 app.add_middleware(CORSMiddleware, allow_origins=["*"], allow_methods=["*"], allow_headers=["*"], allow_credentials=True)
+app.add_middleware(HTTPSRedirectMiddleware)
 
 app.mount("/", StaticFiles(directory="static", html=True), name="static")
 
