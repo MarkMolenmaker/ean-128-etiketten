@@ -22,7 +22,7 @@ export default {
       const formData = new FormData();
       formData.append('file', this.file);
 
-      fetch('/api/v1/file/upload/', {
+      fetch('https://ean-128-etiketten-markmolenmaker.koyeb.app/api/v1/file/upload/', {
         method: 'POST',
         body: formData
       })
