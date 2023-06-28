@@ -1,6 +1,5 @@
 # python-multipart is required for file upload
-from fastapi import FastAPI, UploadFile, File
-from fastapi.middleware.httpsredirect import HTTPSRedirectMiddleware
+from fastapi import FastAPI, UploadFile, File, APIRouter
 from starlette.middleware.cors import CORSMiddleware
 from starlette.responses import FileResponse
 from starlette.staticfiles import StaticFiles
@@ -8,15 +7,14 @@ from starlette.staticfiles import StaticFiles
 import fitz  # python -m pip install --upgrade pymupdf
 import re
 
+# App instances
 app = FastAPI(title="Ean-128 Etiketten")
-api_app = FastAPI(title="Ean-128 Etiketten API")
-app.mount('/api', api_app)
-
 app.add_middleware(CORSMiddleware, allow_origins=["*"], allow_methods=["*"], allow_headers=["*"], allow_credentials=True)
-app.add_middleware(HTTPSRedirectMiddleware)
 
+api_app = FastAPI(title="Ean-128 Etiketten API")
+
+app.mount("/api/v1", api_app, name="api")
 app.mount("/", StaticFiles(directory="static", html=True), name="static")
-
 
 def list_join(seq):
     """ Join a sequence of lists into a single list, much like str.join
@@ -92,12 +90,12 @@ def convert_barcodes_pdf(file_path):
     doc.close()
 
 
-@api_app.get("/v1/debug")
+@api_app.get("/debug")
 async def say_hello():
     return {'message': 'Hello World!'}
 
 
-@api_app.post("/v1/file/upload")
+@api_app.post("/file/upload")
 async def file_upload(file: UploadFile = File(...)):
     try:
         contents = file.file.read()

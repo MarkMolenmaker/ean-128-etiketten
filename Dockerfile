@@ -18,6 +18,7 @@ WORKDIR /app
 
 # Copy Python app files
 COPY main.py .
+COPY _init_.py .
 COPY code128.ttf .
 COPY requirements.txt .
 
@@ -28,5 +29,7 @@ RUN pip install --upgrade pip \
 # Copy built frontend files from the previous stage
 COPY --from=frontend-builder /app/dist /app/static
 
+EXPOSE 8000
+
 # Set the entrypoint command
-ENTRYPOINT ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "80"]
+ENTRYPOINT ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
